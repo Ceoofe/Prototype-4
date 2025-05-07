@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Update() // Follows the enemies
     {
         target = GameObject.FindWithTag("Enemy");
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision other)
+    void OnCollisionEnter(Collision other) // Destroys the enemy and itself
     {
         if (other.gameObject.CompareTag("Enemy"))
         {

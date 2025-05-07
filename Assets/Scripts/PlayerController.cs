@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    // Variables //
     private Rigidbody playerRb;
     public float speed = 5.0f;
     private GameObject focalPoint;
@@ -19,7 +20,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerRb = GetComponent<Rigidbody>();
+        playerRb = GetComponent<Rigidbody>(); // Finds player rigidbody
         focalPoint = GameObject.Find("Focal Point");
     }
 
@@ -28,7 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         float forwardInput = Input.GetAxis("Vertical");
         playerRb.AddForce(focalPoint.transform.forward * speed * forwardInput);
-        powerupIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0);
+        powerupIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0); // Sets the indicators position 
         powerupIndicator2.transform.position = transform.position + new Vector3(0, -0.5f, 0);
         powerupIndicator3.transform.position = transform.position + new Vector3(0, -0.5f, 0);
 
@@ -40,18 +41,18 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.AddForce(Vector3.up * powerupStrength, ForceMode.Impulse); // Add force up axis
             isJump = true;
-            StartCoroutine(Drag());
+            StartCoroutine(Velocity());
         }
 
         if (transform.position.y < -2)
         {
-            transform.position = new Vector3(0,0,0);
+            transform.position = new Vector3(0,0,0); // If player falls, player position is set to the center
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Powerup") && hasPowerup2 == false && hasPowerup3 == false)
+        if (other.CompareTag("Powerup") && hasPowerup2 == false && hasPowerup3 == false) // Collects the powerup and activites it
         {
             hasPowerup = true;
             Destroy(other.gameObject);
@@ -76,7 +77,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && hasPowerup)
+        if (collision.gameObject.CompareTag("Enemy") && hasPowerup) // Pushes the enemy with force
         {
             Rigidbody enemyRigidbody = collision.gameObject.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = (collision.gameObject.transform.position - transform.position);
@@ -85,7 +86,7 @@ public class PlayerController : MonoBehaviour
             enemyRigidbody.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
         }
 
-        if (collision.gameObject.CompareTag("Ground") && hasPowerup3 && isJump == true)
+        if (collision.gameObject.CompareTag("Ground") && hasPowerup3 && isJump == true) // Sets a explosion once on ground
         {
             for (int i = 0; i < GameObject.FindObjectsOfType<Enemy>().Length; i++)
             {
@@ -97,7 +98,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator PowerupCountdownRoutine()
+    IEnumerator PowerupCountdownRoutine() // Sets a timer for the powerup
     {
         yield return new WaitForSeconds(7);
         hasPowerup = false;
@@ -108,14 +109,14 @@ public class PlayerController : MonoBehaviour
         powerupIndicator3.gameObject.SetActive(false);
     }
 
-    IEnumerator BulletSpawn()
+    IEnumerator BulletSpawn() // Clones a bullet in the scene
     {
             
             yield return new WaitForSeconds(0.03f);
             Instantiate(projectile, transform.position, transform.rotation);
     }
 
-    IEnumerator Drag()
+    IEnumerator Velocity()
     {
         yield return new WaitForSeconds(1f);
         playerRb.velocity = new Vector3 (0, -50, 0);// Increase player's vecolcity falldown

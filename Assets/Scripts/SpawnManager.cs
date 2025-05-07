@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    // Variables //
     public GameObject[] enemyPrefab;
     private float spawnRange = 9;
     public int enemyCount;
@@ -13,14 +14,14 @@ public class SpawnManager : MonoBehaviour
     int powerIndex;
 
     // Start is called before the first frame update
-    void Start()
+    void Start() // Spawns the powerup and enemy
     {
         powerIndex = Random.Range(0, powerupPrefab.Length);
         SpawnEnemyWave(waveNumber);
         Instantiate(powerupPrefab[powerIndex], GenerateSpawnPosition(), powerupPrefab[powerIndex].transform.rotation);
     }
 
-    private Vector3 GenerateSpawnPosition()
+    private Vector3 GenerateSpawnPosition() // Random positions for the instances
     {
         float spawnPosX = Random.Range(-spawnRange, spawnRange);
         float spawnPosZ = Random.Range(-spawnRange, spawnRange);
@@ -28,7 +29,7 @@ public class SpawnManager : MonoBehaviour
         return randomPos;
     }
     // Update is called once per frame
-    void Update()
+    void Update() // Add a another wave once the previous one is done
     {
         enemyCount = FindObjectsOfType<Enemy>().Length;
         if (enemyCount == 0)
@@ -40,7 +41,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    void SpawnEnemyWave(int enemiesToSpawn)
+    void SpawnEnemyWave(int enemiesToSpawn) // Spawn enemies for each waves
     {
         enemyIndex = Random.Range(0, enemyPrefab.Length);
         for (int i = 0; i < enemiesToSpawn; i++)
